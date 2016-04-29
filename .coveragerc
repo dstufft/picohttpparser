@@ -1,0 +1,11 @@
+[run]
+branch = True
+source =
+    picohttpparser
+    tests/
+
+[paths]
+source =
+   src/picohttpparser
+   .tox/*/lib/python*/site-packages/picohttpparser
+   .tox/pypy/site-packages/picohttpparser
