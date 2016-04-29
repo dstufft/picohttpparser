@@ -67,6 +67,7 @@ class RequestParser(object):
         buf = ffi.new("const char[]", data)
         buf_len = len(data)
 
+        # Actually parse the bytes given to us
         ret = lib.phr_parse_request(
             buf,
             buf_len,
