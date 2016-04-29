@@ -60,9 +60,16 @@ class RequestParser(object):
     def parse(self, data):
         # TODO: Figure out how to support zero_buffer.
 
+        # We need to allocate this ourselves instead of allowing CFFI to do it
+        # for us, because picohttpparser will simply set a pointer back to this
+        # data and it's possible that the copy that CFFI made will have already
+        # been cleaned up if we don't.
+        buf = ffi.new("const char[]", data)
+        buf_len = len(data)
+
         ret = lib.phr_parse_request(
-            data,
-            len(data),
+            buf,
+            buf_len,
             self._method,
             self._method_len,
             self._path,
@@ -82,7 +89,7 @@ class RequestParser(object):
             # If we've gotten a partial request, then we'll record how much
             # data we've actually read so that we can read starting from the
             # last length next time.
-            self._data_read = len(data)
+            self._data_read = buf_len
 
             # Raise a PartialRequest to let the caller know that we need more
             # data before we can parse this request.
