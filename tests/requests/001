@@ -1,0 +1,8 @@
+REQUEST = b"""\
+GET / HTTP/1.0\r
+\r
+"""
+
+PARSED = (b"GET", b"/", (1, 0), [])
+
+READ = 18

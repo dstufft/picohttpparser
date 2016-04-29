@@ -1,4 +1,6 @@
 include LICENSE README.rst
+include .coveragerc tox.ini
+
 include src/picohttpparser_build.py
 
 include src/libpicohttpparser/README.md
