@@ -1,0 +1,6 @@
+include LICENSE README.rst
+include src/picohttpparser_build.py
+
+include src/libpicohttpparser/README.md
+include src/libpicohttpparser/picohttpparser.c
+include src/libpicohttpparser/picohttpparser.h
