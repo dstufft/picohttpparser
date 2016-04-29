@@ -4,4 +4,6 @@ build
 *.pyc
 *.so
 .coverage
+.coverage.*
 .tox
+.cache
