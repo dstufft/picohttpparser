@@ -58,8 +58,6 @@ class RequestParser(object):
         self._data_read = 0
 
     def parse(self, data):
-        # TODO: Figure out how to support zero_buffer.
-
         # We need to allocate this ourselves instead of allowing CFFI to do it
         # for us, because picohttpparser will simply set a pointer back to this
         # data and it's possible that the copy that CFFI made will have already
