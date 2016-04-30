@@ -1,0 +1,11 @@
+# Accept MSB characters
+
+REQUEST = b"""\
+GET /\xa0 HTTP/1.0\r
+h: c\xa2y
+\r
+"""
+
+PARSED = (b"GET", b"/\xa0", (1, 0), [(b"h", b"c\xa2y")])
+
+READ = 26

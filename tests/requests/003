@@ -1,0 +1,20 @@
+# With Multibytes
+
+REQUEST = b"""\
+GET /hoge HTTP/1.1\r
+Host: example.com\r
+User-Agent: \343\201\262\343/1.0\r
+\r
+"""
+
+PARSED = (
+    b"GET",
+    b"/hoge",
+    (1, 1),
+    [
+        (b"Host", b"example.com"),
+        (b"User-Agent", b"\343\201\262\343/1.0"),
+    ],
+)
+
+READ = 63

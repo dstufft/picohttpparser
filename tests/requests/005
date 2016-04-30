@@ -1,0 +1,11 @@
+# Parse header name with trailing space
+
+REQUEST = b"""\
+GET / HTTP/1.0\r
+foo : ab\r
+\r
+"""
+
+PARSED = (b"GET", b"/", (1, 0), [(b"foo ", b"ab")])
+
+READ = 28

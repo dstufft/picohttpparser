@@ -1,0 +1,20 @@
+# With Headers
+
+REQUEST = b"""\
+GET /hoge HTTP/1.1\r
+Host: example.com\r
+Cookie: \r
+\r
+"""
+
+PARSED = (
+    b"GET",
+    b"/hoge",
+    (1, 1),
+    [
+        (b"Host", b"example.com"),
+        (b"Cookie", b""),
+    ],
+)
+
+READ = 51

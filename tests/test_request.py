@@ -15,7 +15,9 @@ import os.path
 
 import pytest
 
-from picohttpparser import PartialRequest, InvalidRequest, parse_request
+from picohttpparser import (
+    RequestParser, PartialRequest, InvalidRequest, parse_request,
+)
 
 
 def load_requests():
@@ -41,17 +43,44 @@ def test_request_valid(http_request, parsed_request, parsed_data):
     assert parsed[1] == parsed_data
 
 
-def test_request_partial():
+@pytest.mark.parametrize(
+    "http_request",
+    [
+        b"GET / HTTP/1.0\r\n\r",
+        b"GET",
+        b"GET ",
+        b"GET /",
+        b"GET / ",
+        b"GET / H",
+        b"GET / HTTP/1.",
+        b"GET / HTTP/1.0",
+        b"GET / HTTP/1.0\r",
+    ]
+)
+def test_request_partial(http_request):
     with pytest.raises(PartialRequest):
-        parse_request(b"GET / HTTP/1.0\r\n\r")
+        parse_request(http_request)
 
 
 @pytest.mark.parametrize(
     "http_request",
     [
-        b"GET / HTTP/1.0\r\n:a\r\n\r\n",  # Empty header name
+        b"GET / HTTP/1.0\r\n:a\r\n\r\n",   # Empty header name
+        b"GET / HTTP/1.0\r\n :a\r\n\r\n",  # Space only header name
+        b"G\tT / HTTP/1.0\r\n\r\n",        # Tab in method
     ],
 )
 def test_request_invalid(http_request):
     with pytest.raises(InvalidRequest):
         parse_request(http_request)
+
+
+def test_slowloris():
+    parser = RequestParser()
+
+    with pytest.raises(PartialRequest):
+        parser.parse(b"GET /hoge HTTP/1.0\r\n\r")
+    parsed, read = parser.parse(b"GET /hoge HTTP/1.0\r\n\r\n")
+
+    assert parsed == (b"GET", b"/hoge", (1, 0), [])
+    assert read == 22

@@ -1,0 +1,21 @@
+# With Multilines
+
+REQUEST = b"""\
+GET / HTTP/1.0\r
+foo: \r
+foo: b\r
+  \tc\r
+\r
+"""
+
+PARSED = (
+    b"GET",
+    b"/",
+    (1, 0),
+    [
+        (b"foo", b""),
+        (b"foo", b"bc"),
+    ],
+)
+
+READ = 39

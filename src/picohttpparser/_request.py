@@ -103,6 +103,31 @@ class RequestParser(object):
         # read back to 0, because we're done parsing the current request.
         self._data_read = 0
 
+        # We need to build up a list of all of the headers that we parsed. This
+        # is a bit more complicated than it might appear on the surface,
+        # because we want to be able to handle folded header values and return
+        # those to the caller with the folds removed.
+        headers = []
+        for h in ffi.unpack(self._headers, self._num_headers[0]):
+            # If our name is a NULL, then what we've actually got is the rest
+            # of the previous header with a line fold preceeding it. So we'll
+            # strip the line fold and append it to the value of our previous
+            # header. This isn't the great performance wise (extra copying :()
+            # but line folding is deprecated anyways.
+            if h.name == ffi.NULL:
+                value = bytes(ffi.buffer(h.value, h.value_len)).lstrip()
+                headers[-1] = Header(
+                    name=headers[-1].name,
+                    value=headers[-1].value + value,
+                )
+            # If we have an actual name, than this is a regular header, and we
+            # can just copy the data and stash it in our header structure.
+            else:
+                headers.append(Header(
+                    name=bytes(ffi.buffer(h.name, h.name_len)),
+                    value=bytes(ffi.buffer(h.value, h.value_len)),
+                ))
+
         # Turn all of our data that we got from parsing the request into our
         # little Request object, which is really just a small named tuple that
         # provides some nicer ways to access the data.
@@ -110,13 +135,7 @@ class RequestParser(object):
             method=bytes(ffi.buffer(self._method[0], self._method_len[0])),
             path=bytes(ffi.buffer(self._path[0], self._path_len[0])),
             http_version=(1, self._minor_version[0]),
-            headers=[
-                Header(
-                    name=bytes(ffi.buffer(h.name, h.name_len)),
-                    value=bytes(ffi.buffer(h.value, h.value_len)),
-                )
-                for h in ffi.unpack(self._headers, self._num_headers[0])
-            ]
+            headers=headers,
         )
 
         # Now that we've gotten all of the data we need, we'll go ahead and
