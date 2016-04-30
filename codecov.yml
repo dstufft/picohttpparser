@@ -1,0 +1,16 @@
+codecov:
+  branch: master
+
+notify:
+  status:
+    project:
+      default:
+        target: 100
+
+    patch:
+      default:
+        target: 100
+
+    changes: off
+
+comment: off

@@ -1,7 +1,7 @@
 include LICENSE README.rst
 include .coveragerc tox.ini
 
-exclude .coverage
+exclude .coverage codecov.yml
 exclude .travis .travis/install.sh .travis/run.sh .travis.yml
 
 include src/picohttpparser_build.py
