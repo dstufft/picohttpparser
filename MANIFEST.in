@@ -1,8 +1,14 @@
 include LICENSE README.rst
 include .coveragerc tox.ini
 
+exclude .coverage
+exclude .travis .travis/install.sh .travis/run.sh .travis.yml
+
 include src/picohttpparser_build.py
 
 include src/libpicohttpparser/README.md
 include src/libpicohttpparser/picohttpparser.c
 include src/libpicohttpparser/picohttpparser.h
+
+recursive-include tests *.py
+include tests/requests/*
