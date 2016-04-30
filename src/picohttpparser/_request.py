@@ -62,6 +62,10 @@ class RequestParser(object):
         # for us, because picohttpparser will simply set a pointer back to this
         # data and it's possible that the copy that CFFI made will have already
         # been cleaned up if we don't.
+        # TODO: This is going to incur a copy to send the data into C land,
+        #       it would be great if we could figure out a way to make that
+        #       copy not required. I'm not sure how to do that though, will
+        #       need some thought put behind it.
         buf = ffi.new("const char[]", data)
         buf_len = len(data)
 
