@@ -1,0 +1,24 @@
+language: python
+
+sudo: false
+group: edge
+dist: trusty
+
+env:
+  - TOXENV=py27 CC=gcc
+  - TOXENV=py33 CC=gcc
+  - TOXENV=py34 CC=gcc
+  - TOXENV=py35 CC=gcc
+  - TOXENV=pypy CC=gcc
+  - TOXENV=py27 CC=clang
+  - TOXENV=py33 CC=clang
+  - TOXENV=py34 CC=clang
+  - TOXENV=py35 CC=clang
+  - TOXENV=pypy CC=clang
+  - TOXENV=packaging
+
+install: .travis/install.sh
+
+script: .travis/run.sh
+
+after_success: codecov
