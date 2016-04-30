@@ -10,10 +10,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from ._chunked import ChunkedParser, parse_chunked
+from ._chunked import PartialChunked, InvalidChunk, ChunkedIncomplete
 from ._request import RequestParser, parse_request
 from ._request import PartialRequest, InvalidRequest
 
 
 __all__ = [
+    "ChunkedParser", "parse_chunked",
+    "PartialChunked", "InvalidChunk", "ChunkedIncomplete",
     "RequestParser", "PartialRequest", "InvalidRequest", "parse_request",
 ]
